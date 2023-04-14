@@ -25,15 +25,20 @@
 	    
 	    for(let i = 0; i < bound.features.length; i++) {
     		//console.log(bound["features"][i]["properties"]["Name"])
-		var polygondata = bound["features"][i]["geometry"]["coordinates"];
+		    var polygondata = bound["features"][i]["geometry"]["coordinates"];
 	
             	polygondata[0].forEach(function (item, index) {
                 	polygondata[0][index] = L.GeoJSON.coordsToLatLng(polygondata[0][index])
             	});
-	    
+
             	var polygon = L.polygon(
             	polygondata[0]
             	).addTo(map);
+                if (bound["features"][i]["properties"]["boundaryType"] == "obstacle"){
+                    polygon.setStyle({fillColor:"#FF0000"});
+                    polygon.bringToFront();
+                }
+		    polygon.bindPopup(bound["features"][i]["properties"]["desc"]);
 		
 	    }
 	    
