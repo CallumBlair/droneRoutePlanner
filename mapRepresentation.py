@@ -1,16 +1,13 @@
-import geopandas
-import json
-
-gdf = geopandas.read_file("propertyDetails.geojson").to_json()
-gdf = json.loads(gdf)
-
-
-class gridRep ():
+class gridRep():
 
     def __init__(self, gpd):
         self.geopandas = gpd
         self.grid = []
         self.minMax = []
+        self.target = []
+        self.start = []
+        self.startGrid = []
+        self.targetGrid = []
 
     def createGrid(self, sizeX, sizeY):
         grid = []
@@ -164,23 +161,70 @@ class gridRep ():
         self.grid = grid
         return None
 
+    def stCoords(self, start, target):
+        minMax = self.minMax
+        grid = self.grid
+        gridX = len(grid)
+        gridY = len(grid[0])
+        width = minMax[0] - minMax[2]
+        height = minMax[1] - minMax[3]
+        widthSpacing = width/gridX
+        heightSpacing = height/gridY
+        minX = minMax[2]
+        minY = minMax[3]
+        
+
+        startX = (start[0] - minX)/widthSpacing
+        startY = (start[1] - minY)/heightSpacing
+        targetX = (target[0] - minX)/widthSpacing
+        targetY = (target[1] - minY)/heightSpacing
+        self.startGrid = "00000" + str(int(startX))+ "00000" + str(int(startY))
+        self.targetGrid = "00000" + str(int(targetX))+ "00000" + str(int(targetY))
+        return [self.startGrid, self.targetGrid]
+        
+    def routeConversion(self, route):
+        minMax = self.minMax
+        grid = self.grid
+        gridX = len(grid)
+        gridY = len(grid[0])
+        width = minMax[0] - minMax[2]
+        height = minMax[1] - minMax[3]
+        widthSpacing = width/gridX
+        heightSpacing = height/gridY
+        minX = minMax[2]
+        minY = minMax[3]
+        convertedRoute = []
+
+        for stop in route:
+
+            routeX = float(stop[0])
+            routeY = float(stop[1])
+            
+            x = minX + (widthSpacing*routeX)
+            y = minY + (heightSpacing*routeY)
+            convertedRoute.append([x,y])
+        print(convertedRoute)
+                
+
+        
     def produceGrid(self, sizeX, sizeY):
         self.createGrid(sizeX, sizeY)
         self.outerBoundary()
         self.markOuterBoundary()
         self.markObstacles()
         return self.grid
+
+    
         
-        
-rep = gridRep(gdf)
-rep.produceGrid(65,65)
+#rep = gridRep(gdf)
+#rep.produceGrid(65,65)
 #rep.createGrid(65,65)
 #rep.outerBoundary()
 #rep.markOuterBoundary()
 #rep.markObstacles()
 
-for x in rep.grid:
-    print(x)
+#for x in rep.grid:
+#    print(x)
 #print(rep.outerBoundary())
 #sd = rep.markOuterBoundary(rep.createGrid(65,65), rep.outerBoundary())
 #rep.markObstacles(sd,rep.outerBoundary())

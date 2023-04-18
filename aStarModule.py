@@ -46,12 +46,6 @@ testGrid2 = [[0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
             ]
 
 
-startNode = [0,0]
-#targetNode = [7,8]
-targetNode = [0,32]
-
-openList = []
-closedList = []
 
 class Node:
     def __init__(self, cord, ident, neighbor = None):
@@ -166,6 +160,7 @@ class aStar():
         self.open = []
         self.closed = []
         self.steps = 0
+        self.route = []
         
     def manhattan(self, node1, node2):
         return abs(node1.x - node2.x) + abs(node1.y - node2.y)
@@ -238,9 +233,15 @@ class aStar():
             if nodes == self.start:
                 routeIncomplete = False
         #print(route)
-        return(route)
+        self.route = route
+        cordRoute = []
+        for x in route:
+            cordRoute.append([self.graph.getNode(x).x,self.graph.getNode(x).y])
+    
+        return(cordRoute)
 
-    def displayImage(self, grid, route):
+    def displayImage(self, grid):
+        route = self.route
         array = []
         for stops in route:
                 array.append([self.graph.getNode(stops).x,self.graph.getNode(stops).y])
@@ -258,20 +259,20 @@ class aStar():
             print(p)
         
 
-graph = graph()
+#graph = graph()
 ##graph.addNode([1,1],1)
 ##graph.addNode([1,2],2)
 ##graph.addEdge(1,2)
 ##graph.addEdge(1,2)
 ##print(graph.getNode("1").details())
-graph.parseGrid(testGrid2)
+#graph.parseGrid(testGrid2)
 #print(graph.getNodes())
 #str(00000)
 #astar = aStar(graph, "000000000000", "000007000008")
-astar = aStar(graph, "000000000000", "0000032000000")
+#astar = aStar(graph, "000000000000", "0000032000000")
 #print(astar.manhattan(graph.getNode("00"),graph.getNode("78")))
-route = astar.findPath()
-astar.displayImage(testGrid2,route)
+#route = astar.findPath()
+#astar.displayImage(testGrid2,route)
 #graph.parseNeighbors([5,5], testGrid)
 
 ##graph = graph()
