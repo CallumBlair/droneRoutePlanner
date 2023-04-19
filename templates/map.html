@@ -3,8 +3,8 @@
 
 {% block content %} 
 <div id="content"> </div>
-        <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-grey" style="width:25%;" id="mySidebar">
-          <button class="w3-bar-item w3-button w3-hide-large"
+        <div class="w3-sidebar w3-bar-block w3-animate-left w3-card w3-grey" style="width:25%" id="mySidebar">
+          <button class="w3-bar-item w3-button w3-large"
           onclick="w3_close()">Close &times;</button>
           <div id="setStart">
             <p>Start Node:</p>
@@ -105,7 +105,7 @@
             document.getElementById("maper").style.width = "100%";
         }
 
-
+        w3_close()
 	    //var bound = JSON.parse('{{ boundaries | tojson}}');
         var marker;
 	    var bound = JSON.parse({{ boundaries | tojson}});
