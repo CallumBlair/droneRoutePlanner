@@ -1,118 +1,24 @@
-{% extends "components/base.html" %} 
-{% set active_page = "map" %} 
+<!DOCTYPE html>    
+    <head>
+        <link rel="stylesheet" href="static/css/style.css"/>
+        <link rel="stylesheet" href="static/css/leaflet.css"/>
+        <script src="static/leaflet.js"></script>
+    </head>
 
-{% block content %} 
-<div id="content"> </div>
-        <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-grey" style="width:25%;" id="mySidebar">
-          <button class="w3-bar-item w3-button w3-hide-large"
-          onclick="w3_close()">Close &times;</button>
-          <div id="setStart">
-            <p>Start Node:</p>
-            <span id="startNode"></span>
-            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStart()" id="startButton">Set start node</button>
-          </div>
-          <div id="setTarget">
-            <p>Target Node:</p>
-            <span id="targetNode"></span>
-            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setTarget()" id="targetButton">Set target node</button>
-          </div>
-          <!--<a href="#" class="w3-bar-item w3-button">Link 3</a> -->
-          <div id="requestRoute">
-            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="fireRequest()" id="fireButton">Request Route</button>
-          </div>
-          <div id="requestForm" style="visibility: hidden;"> 
-            <form id="myForm" action="/requestPath" method="post"> 
-                <input type="hidden" id="stNode" name="stNode" value="">
-                <input type="hidden" id="tgtNode" name="tgtNode" value="">
-                <input type="submit" name="action" value="Submit" id="fireButton">
-            </form>
-          </div>
-
-        </div>
-   
-        <div class="w3-grey" style="width:100%;">
-          <button class="w3-button w3-grey w3-xlarge" onclick="w3_open()">&#9776;</button>
-        </div>
-              
-
-
-        <div class="map-wrapper" id="maper">
+    <body>
+        <div class="map-wrapper">
             <div id="map">
             </div>
         </div>
 
         <script type= "text/javascript">
-        var currentLocation = [];
-        var startingNode = [];
-        var targetedNode = [];
-        //var path = JSON.parse({{ path| tojson}});
-        var path = {{path}};
-        //path = []
-        console.log(path)
-
-         
-        document.getElementById("startNode").innerHTML = "Unselected"
-        document.getElementById("targetNode").innerHTML = "Unselected"
-
-        function fireRequest(){
-            if(document.getElementById("startNode").innerHTML == "Unselected" || document.getElementById("targetNode").innerHTML == "Unselected"){
-                alert("Ensure both start and target nodes are selected")
-            }else{
-                document.getElementById("stNode").value = (startingNode);
-                document.getElementById("tgtNode").value = (targetedNode);
-                document.getElementById("myForm").submit(); 
-            }
-        }
-
-
-        function setStart() {
-            if(currentLocation.length == 0){
-                document.getElementById("startNode").innerHTML = "Unselected";
-                document.getElementById("startButton").innerHTML = "Please select start again";
-            }else{
-                document.getElementById("startNode").innerHTML = currentLocation;
-                document.getElementById("startButton").innerHTML = "Set start node";
-                startingNode = currentLocation
-
-            }
-            currentLocation = []
-        }
-
-        
-        function setTarget() {
-            if(currentLocation.length == 0){
-                document.getElementById("targetNode").innerHTML = "Unselected";
-                document.getElementById("targetButton").innerHTML = "Please select target again";
-            }else{
-                document.getElementById("targetNode").innerHTML = currentLocation;
-                document.getElementById("targetButton").innerHTML = "Set target node";
-                targetedNode = currentLocation
-            }
-            currentLocation = []
-        }
-
-
-
-
-
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("maper").style.width = "75%";
-        }
-
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("maper").style.width = "100%";
-        }
-
 
 	    //var bound = JSON.parse('{{ boundaries | tojson}}');
         var marker;
 	    var bound = JSON.parse({{ boundaries | tojson}});
         var map = L.map('map').setView([50.71, -2.44], 13);
         map.on("click", function (event){
-            //console.log(event.latlng.lat + ", " + event.latlng.lng);
-            currentLocation = [event.latlng.lat, event.latlng.lng]
+            console.log(event.latlng.lat + ", " + event.latlng.lng);
             if(marker) {
                 map.removeLayer(marker);
             }
@@ -146,27 +52,6 @@
             });
 		
 	    };
-
-        
-        if (path.length != 1){
-            console.log("run")
-            var pointLine = [];
-            for(let i = 0; i<path.length; i++) {
-                cord = path[i];
-                coord = new L.latLng(cord[1], cord[0]);
-                pointLine.push(coord);
-            
-            };
-            var line = new L.Polyline(pointLine, {
-                color: "red",
-                weight: 3,
-            });
-            line.addTo(map);
-        };
-
-
-
-        /*
 	    var testLine =[[-2.3943867617217642, 50.73105944633322], [-2.3943867617217642, 50.730632552316685], [-2.394918748219613, 50.73020565830015], [-2.3954507347174623, 50.729778764283616], [-2.395982721215311, 50.72935187026708], [-2.3965147077131603, 50.72892497625054], [-2.3965147077131603, 50.728498082234005], [-2.3965147077131603, 50.72807118821747], [-2.395982721215311, 50.727644294200935], [-2.3954507347174623, 50.7272174001844], [-2.394918748219613, 50.726790506167866], [-2.3943867617217642, 50.72636361215133], [-2.3943867617217642, 50.7259367181348], [-2.3943867617217642, 50.72550982411826], [-2.394918748219613, 50.72508293010173], [-2.3954507347174623, 50.724656036085186], [-2.395982721215311, 50.72422914206865], [-2.3965147077131603, 50.72380224805212], [-2.397046694211009, 50.72337535403558], [-2.3975786807088584, 50.72294846001905], [-2.398110667206707, 50.72252156600251], [-2.398642653704556, 50.72209467198598], [-2.3991746402024052, 50.721667777969444], [-2.399706626700254, 50.72124088395291], [-2.4002386131981033, 50.72081398993637], [-2.400770599695952, 50.72038709591983], [-2.400770599695952, 50.7199602019033], [-2.4013025861938013, 50.71953330788676], [-2.40183457269165, 50.71910641387023], [-2.4023665591894994, 50.718679519853694], [-2.402898545687348, 50.71825262583716], [-2.4034305321851974, 50.717825731820625], [-2.4039625186830462, 50.71739883780409], [-2.404494505180895, 50.71739883780409], [-2.4050264916787443, 50.71739883780409], [-2.405558478176593, 50.71697194378755], [-2.4060904646744423, 50.716545049771014], [-2.406622451172291, 50.71611815575448], [-2.4071544376701404, 50.715691261737945], [-2.407686424167989, 50.71526436772141], [-2.4082184106658384, 50.714837473704875], [-2.408750397163687, 50.71441057968834], [-2.409282383661536, 50.713983685671806], [-2.4098143701593853, 50.71355679165527]];
         var pointLine = [];
         for(let i = 0; i<testLine.length; i++) {
@@ -197,8 +82,10 @@
             weight: 3,
         });
         line.addTo(map);
-        */
+
 
         </script>
-</div>
-{% endblock %}
+    </body>
+
+
+</html>

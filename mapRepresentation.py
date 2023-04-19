@@ -203,7 +203,7 @@ class gridRep():
             x = minX + (widthSpacing*routeX)
             y = minY + (heightSpacing*routeY)
             convertedRoute.append([x,y])
-        print(convertedRoute)
+        return(convertedRoute)
                 
 
         
