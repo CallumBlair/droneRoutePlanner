@@ -15,3 +15,8 @@ body {
     padding-top: 4%;
 } 
 
+#setStart {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px; 
+}

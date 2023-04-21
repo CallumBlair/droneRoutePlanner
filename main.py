@@ -37,6 +37,7 @@ def displayMap():
 
 @app.route('/mapAuth' , methods = ["post"])
 def displayMapAuth():
+    session['userName'] = "init"
     username = request.form['userName']
     if username != session["userName"]:
         session["path"] = [1]
