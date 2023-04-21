@@ -32,6 +32,11 @@
    
         <div class="w3-grey" style="width:100%;">
           <button class="w3-button w3-grey w3-xlarge" onclick="w3_open()">&#9776;</button>
+          <form id="myForm" action="/mapAuth" method="post" style="float:right;margin:10px 0 0 0;">
+            <input type="text" name="userName" id="userName" value="{{username}}" >
+            <input type="submit" name="submitLogin" value="Login" id="submitLogin">
+        </form>
+          
         </div>
               
 
@@ -49,8 +54,11 @@
         var path = {{path}};
         //path = []
         console.log(path)
+        var startMarker;
+        var targetMarker; 
+        var previewLine;
 
-         
+
         document.getElementById("startNode").innerHTML = "Unselected"
         document.getElementById("targetNode").innerHTML = "Unselected"
 
@@ -66,13 +74,32 @@
 
 
         function setStart() {
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
             if(currentLocation.length == 0){
                 document.getElementById("startNode").innerHTML = "Unselected";
                 document.getElementById("startButton").innerHTML = "Please select start again";
+                map.removeLayer(startMarker);
+
             }else{
                 document.getElementById("startNode").innerHTML = currentLocation;
                 document.getElementById("startButton").innerHTML = "Set start node";
                 startingNode = currentLocation
+                if(startMarker){
+                    map.removeLayer(startMarker);
+                }
+                
+                startMarker = new L.marker(currentLocation).addTo(map);
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                    
+                    
+                }
 
             }
             currentLocation = []
@@ -80,12 +107,28 @@
 
         
         function setTarget() {
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
             if(currentLocation.length == 0){
                 document.getElementById("targetNode").innerHTML = "Unselected";
                 document.getElementById("targetButton").innerHTML = "Please select target again";
+                map.removeLayer(targetMarker);
             }else{
                 document.getElementById("targetNode").innerHTML = currentLocation;
                 document.getElementById("targetButton").innerHTML = "Set target node";
+                if(targetMarker){
+                    map.removeLayer(targetMarker);
+                }
+                targetMarker = new L.marker(currentLocation).addTo(map);
+                
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }
                 targetedNode = currentLocation
             }
             currentLocation = []
@@ -109,7 +152,9 @@
 	    //var bound = JSON.parse('{{ boundaries | tojson}}');
         var marker;
 	    var bound = JSON.parse({{ boundaries | tojson}});
+        console.log(bound);
         var map = L.map('map').setView([50.71, -2.44], 13);
+        
         map.on("click", function (event){
             //console.log(event.latlng.lat + ", " + event.latlng.lng);
             currentLocation = [event.latlng.lat, event.latlng.lng]
@@ -125,9 +170,10 @@
             }).addTo(map);
 
 	    
-	    for(let i = 0; i < bound.features.length; i++) {
+	    for(let i = 0; i < bound.length; i++) {
     		//console.log(bound["features"][i]["properties"]["Name"])
-		    var polygondata = bound["features"][i]["geometry"]["coordinates"];
+		    //var polygondata = bound["features"][i]["geometry"]["coordinates"];
+            var polygondata = bound[i]["geometry"]["coordinates"];
 	
             polygondata[0].forEach(function (item, index) {
                 polygondata[0][index] = L.GeoJSON.coordsToLatLng(polygondata[0][index])
@@ -136,9 +182,12 @@
             var polygon = L.polygon(
             polygondata[0]
             ).addTo(map);
-            if (bound["features"][i]["properties"]["boundaryType"] == "obstacle"){
+            if (bound[i]["properties"]["boundaryType"] == "obstacle"){
                 polygon.setStyle({fillColor:"#FF0000"});
                 polygon.bringToFront();
+            }
+            if (bound[i]["properties"]["boundaryType"] == "property"){
+                map.fitBounds(polygon.getBounds());
             }
 		    //polygon.bindPopup(bound["features"][i]["properties"]["desc"]);
             polygon.on("click", function (event) {

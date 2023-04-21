@@ -19,10 +19,22 @@ import aStarModule as a
 #testEnd2 =   [50.712562,-2.403645]
 
 
-gdf = geopandas.read_file("propertyDetails.geojson").to_json()
-gdf = json.loads(gdf)
+#gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+#gdf = json.loads(gdf)
 
-def getRoute(start, end):
+def getRoute(start, end, username):
+    gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+    gdf = json.loads(gdf)
+    boundaries = []
+    
+    
+    for x in range (len(gdf["features"])):
+        if gdf["features"][x]["properties"]["userName"] == username:
+            boundaries.append(gdf["features"][x])
+
+    gdf = boundaries
+    #boundaries = json.dumps(boundaries)
+    
     grid = mr.gridRep(gdf)
 
     tempGrid = grid.produceGrid(150,150)

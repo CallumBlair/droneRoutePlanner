@@ -20,7 +20,8 @@ class gridRep():
         return None
         
     def outerBoundary(self):
-        featureArr = self.geopandas["features"]
+        #featureArr = self.geopandas["features"]
+        featureArr = self.geopandas
         maxX = featureArr[0]["geometry"]["coordinates"][0][0][0]
         maxY = featureArr[0]["geometry"]["coordinates"][0][0][1]
         minX = maxX
@@ -63,7 +64,8 @@ class gridRep():
         #points = []
         lines = []
         minPoint = [minX - widthSpacing, minY - heightSpacing]
-        featureArr = self.geopandas["features"]
+        #featureArr = self.geopandas["features"]
+        featureArr = self.geopandas
         for f in featureArr:
             if f["properties"]["boundaryType"] == "property":
                 propertyBoundary = f["geometry"]["coordinates"][0]
@@ -119,7 +121,8 @@ class gridRep():
         
 
         
-        featureArr = self.geopandas["features"]
+        #featureArr = self.geopandas["features"]
+        featureArr = self.geopandas
         obstacles = []
         for f in featureArr:
             if f["properties"]["boundaryType"] == "obstacle":
