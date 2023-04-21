@@ -17,6 +17,13 @@ body {
 
 #setStart {
     border-radius: 25px;
-    border: 2px solid #73AD21;
+    border: 2px solid #6f746c;
     padding: 20px; 
 }
+
+#setTarget{
+    border-radius: 25px;
+    border: 2px solid #6f746c;
+    padding: 20px; 
+}
+

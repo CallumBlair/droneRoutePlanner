@@ -11,18 +11,59 @@
             <span id="startNode"></span>
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStart()" id="startButton">Set start node</button>
           </div>
+
+          <div id="setStop1" style="display:none;">
+            <p>Stop 1 Node:</p>
+            <span id="stop1Node"></span>
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStop1()" id="stop1Button">Set target node</button>
+          </div>
+
+          <div id="setStop2" style="display:none;">
+            <p>Stop 2 Node:</p>
+            <span id="stop2Node"></span>
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStop2()" id="stop2Button">Set target node</button>
+          </div>
+
+          <div id="setStop3" style="display:none;">
+            <p>Stop 3 Node:</p>
+            <span id="stop3Node"></span>
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStop3()" id="stop3Button">Set target node</button>
+          </div>
+
+          <div id="setStop4" style="display:none;">
+            <p>Stop 4 Node:</p>
+            <span id="stop4Node"></span>
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setStop4()" id="stop4Button">Set target node</button>
+          </div>
+
           <div id="setTarget">
             <p>Target Node:</p>
             <span id="targetNode"></span>
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="setTarget()" id="targetButton">Set target node</button>
           </div>
+
+
+          <div id="addStop">
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="addStop()" id="addStop">Add stop to route</button>
+          </div>
+
+          <div id="removeStop">
+            <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="removeStop()" id="removeStop">Remove stop from route</button>
+          </div>
+
+
+
           <!--<a href="#" class="w3-bar-item w3-button">Link 3</a> -->
           <div id="requestRoute">
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="fireRequest()" id="fireButton">Request Route</button>
           </div>
-          <div id="requestForm" style="visibility: hidden;"> 
+          <div id="requestForm" style="visibility:hidden;"> 
             <form id="myForm" action="/requestPath" method="post"> 
                 <input type="hidden" id="stNode" name="stNode" value="">
+                <input type="hidden" id="1Node" name="1Node" value="">
+                <input type="hidden" id="2Node" name="2Node" value="">
+                <input type="hidden" id="3Node" name="3Node" value="">
+                <input type="hidden" id="4Node" name="4Node" value="">
                 <input type="hidden" id="tgtNode" name="tgtNode" value="">
                 <input type="submit" name="action" value="Submit" id="fireButton">
             </form>
@@ -57,10 +98,19 @@
         var startMarker;
         var targetMarker; 
         var previewLine;
-
+        var stopCounter = 0;
+        var node1;
+        var node2;
+        var node3;
+        var node4;
 
         document.getElementById("startNode").innerHTML = "Unselected"
         document.getElementById("targetNode").innerHTML = "Unselected"
+        document.getElementById("stop1Node").innerHTML = "Unselected"
+        document.getElementById("stop2Node").innerHTML = "Unselected"
+        document.getElementById("stop3Node").innerHTML = "Unselected"
+        document.getElementById("stop4Node").innerHTML = "Unselected"
+
 
         function fireRequest(){
             if(document.getElementById("startNode").innerHTML == "Unselected" || document.getElementById("targetNode").innerHTML == "Unselected"){
@@ -68,6 +118,11 @@
             }else{
                 document.getElementById("stNode").value = (startingNode);
                 document.getElementById("tgtNode").value = (targetedNode);
+                document.getElementById("1Node").value = (node1);
+                document.getElementById("2Node").value = (node2);
+                document.getElementById("3Node").value = (node3);
+                document.getElementById("4Node").value = (node4);
+
                 document.getElementById("myForm").submit(); 
             }
         }
@@ -134,8 +189,161 @@
             currentLocation = []
         }
 
+        
+        function setStop1() {
+            
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
+            if(currentLocation.length == 0){
+                document.getElementById("stop1Node").innerHTML = "Unselected";
+                document.getElementById("stop1Button").innerHTML = "Please select target again";
+                map.removeLayer(targetMarker);
+            }else{
+                document.getElementById("stop1Node").innerHTML = currentLocation;
+                document.getElementById("stop1Button").innerHTML = "Set target node";
+                if(targetMarker){
+                    map.removeLayer(targetMarker);
+                }
+                targetMarker = new L.marker(currentLocation).addTo(map);
+                
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }
+                node1 = currentLocation
+            }
+            currentLocation = []
+        }
 
 
+        function setStop2() {
+            
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
+            if(currentLocation.length == 0){
+                document.getElementById("stop2Node").innerHTML = "Unselected";
+                document.getElementById("stop2Button").innerHTML = "Please select target again";
+                map.removeLayer(targetMarker);
+            }else{
+                document.getElementById("stop2Node").innerHTML = currentLocation;
+                document.getElementById("stop2Button").innerHTML = "Set target node";
+                if(targetMarker){
+                    map.removeLayer(targetMarker);
+                }
+                targetMarker = new L.marker(currentLocation).addTo(map);
+                
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }
+                node2 = currentLocation
+            }
+            currentLocation = []
+        }
+
+
+        function setStop3() {
+            
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
+            if(currentLocation.length == 0){
+                document.getElementById("stop3Node").innerHTML = "Unselected";
+                document.getElementById("stop3Button").innerHTML = "Please select target again";
+                map.removeLayer(targetMarker);
+            }else{
+                document.getElementById("stop3Node").innerHTML = currentLocation;
+                document.getElementById("stop3Button").innerHTML = "Set target node";
+                if(targetMarker){
+                    map.removeLayer(targetMarker);
+                }
+                targetMarker = new L.marker(currentLocation).addTo(map);
+                
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }
+                node3 = currentLocation
+            }
+            currentLocation = []
+        }
+    
+
+        function setStop4() {
+            
+            if(previewLine){
+                previewLine.remove(map)
+                
+            }
+            if(currentLocation.length == 0){
+                document.getElementById("stop4Node").innerHTML = "Unselected";
+                document.getElementById("stop4Button").innerHTML = "Please select target again";
+                map.removeLayer(targetMarker);
+            }else{
+                document.getElementById("stop4Node").innerHTML = currentLocation;
+                document.getElementById("stop4Button").innerHTML = "Set target node";
+                if(targetMarker){
+                    map.removeLayer(targetMarker);
+                }
+                targetMarker = new L.marker(currentLocation).addTo(map);
+                
+                if(startMarker && targetMarker){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }
+                node4 = currentLocation
+            }
+            currentLocation = []
+        }
+
+
+        
+
+
+
+
+        function addStop(){
+            //console.log("hi")
+            var nodes = ["setStop1","setStop2","setStop3","setStop4"];
+            document.getElementById(nodes[stopCounter]).style.display = "inline";
+            stopCounter++;
+        }
+
+        function removeStop(){
+            var nodes = ["setStop4","setStop3","setStop2","setStop1"];
+            var node2 = ["stop4Node","stop3Node","stop2Node","stop1Node"]
+            console.log("hi")
+            for(let i = 0; i<nodes.length; i++) {
+                if(document.getElementById(nodes[i]).style.display  == "inline"){
+                    document.getElementById(nodes[i]).style.display = "none";
+                    document.getElementById(node2[i]).innerHTML = "Unselected";
+                    if(i==0){
+                        node4 = undefined;
+                    }else if (i==1){
+                        node3 = undefined;
+                    }else if(i==2){
+                        node2 = undefined;
+                    }else if (i==3){
+                        node1 = undefined;
+                    }
+                    stopCounter--;
+                    break;
+                }
+            }
+        }
 
 
         function w3_open() {

@@ -22,11 +22,11 @@ import aStarModule as a
 #gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 #gdf = json.loads(gdf)
 
-def getRoute(start, end, username):
+def getRoute(start, end, username, node1, node2, node3, node4):
     gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     gdf = json.loads(gdf)
     boundaries = []
-    
+        
     
     for x in range (len(gdf["features"])):
         if gdf["features"][x]["properties"]["userName"] == username:
@@ -38,14 +38,107 @@ def getRoute(start, end, username):
     grid = mr.gridRep(gdf)
 
     tempGrid = grid.produceGrid(150,150)
-    cords = grid.stCoords(start, end)
-
     graph = a.graph()
     graph.parseGrid(tempGrid)
-    astar = a.aStar(graph, cords[0], cords[1])
-    route = astar.findPath()
-    #astar.displayImage(tempGrid)
-    return grid.routeConversion(route)
+    
+    if node1 == [0,0]:
+        cords = grid.stCoords(start, end)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        #astar.displayImage(tempGrid)
+    elif node2 == [0,0]:
+        cords = grid.stCoords(start, node1)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = grid.routeConversion(route)
+        
+        cords = grid.stCoords(node1, end)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+    elif node3 == [0,0]:
+        cords = grid.stCoords(start, node1)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = grid.routeConversion(route)
+
+        cords = grid.stCoords(node1, node2)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+        
+        cords = grid.stCoords(node2, end)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+    elif node4 == [0,0]:
+        cords = grid.stCoords(start, node1)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = grid.routeConversion(route)
+
+        cords = grid.stCoords(node1, node2)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+        cords = grid.stCoords(node2, node3)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+        
+        cords = grid.stCoords(node3, end)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+    else:
+        cords = grid.stCoords(start, node1)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = grid.routeConversion(route)
+
+        cords = grid.stCoords(node1, node2)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+        cords = grid.stCoords(node2, node3)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+        cords = grid.stCoords(node3, node4)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+        
+        cords = grid.stCoords(node4, end)
+        astar = a.aStar(graph, cords[0], cords[1])
+        route = astar.findPath()
+        route.reverse()
+        gridRoute = gridRoute + grid.routeConversion(route)
+
+        
+    #return(str(route))
+    return gridRoute                                                
+    #return grid.routeConversion(route)
+                                                     
+                                                    
 
     #print(route)
 
