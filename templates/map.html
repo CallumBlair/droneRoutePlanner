@@ -97,7 +97,16 @@
         console.log(path)
         var startMarker;
         var targetMarker; 
+        var marker1;
+        var marker2;
+        var marker3;
+        var marker4;
+        
         var previewLine;
+        var previewLine1;
+        var previewLine2;
+        var previewLine3;
+        var previewLine4;
         var stopCounter = 0;
         var node1;
         var node2;
@@ -147,13 +156,16 @@
                 }
                 
                 startMarker = new L.marker(currentLocation).addTo(map);
-                if(startMarker && targetMarker){
+                if(startMarker && marker1){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), marker1.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine.addTo(map)
+                }else if(startMarker && targetMarker){
                     previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
                         color: "purple",
                          weight: 3,})
                     previewLine.addTo(map)
-                    
-                    
                 }
 
             }
@@ -162,10 +174,6 @@
 
         
         function setTarget() {
-            if(previewLine){
-                previewLine.remove(map)
-                
-            }
             if(currentLocation.length == 0){
                 document.getElementById("targetNode").innerHTML = "Unselected";
                 document.getElementById("targetButton").innerHTML = "Please select target again";
@@ -178,23 +186,65 @@
                 }
                 targetMarker = new L.marker(currentLocation).addTo(map);
                 
-                if(startMarker && targetMarker){
+                if(marker4 && targetMarker){
+                    if(previewLine4){
+                        previewLine4.remove(map)    
+                    }
+                    previewLine4 = new L.Polyline([marker4.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine4.addTo(map)
+                }else if(marker3 && targetMarker){
+                    if(previewLine3){
+                        previewLine3.remove(map)    
+                    }
+                    previewLine3 = new L.Polyline([marker3.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine3.addTo(map)
+                }else if(marker2 && targetMarker){
+                    if(previewLine2){
+                        previewLine2.remove(map)    
+                    }
+                    previewLine2 = new L.Polyline([marker2.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine2.addTo(map)
+                }else if(marker1 && targetMarker){
+                    if(previewLine1){
+                        previewLine1.remove(map)    
+                    }
+                    previewLine1 = new L.Polyline([marker1.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine1.addTo(map)
+                }else if(startMarker && targetMarker){
+                    if(previewLine){
+                        previewLine.remove(map)    
+                    }
                     previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
                         color: "purple",
                          weight: 3,})
                     previewLine.addTo(map)
                 }
-                targetedNode = currentLocation
             }
+
+
+
+                targetedNode = currentLocation
+            
             currentLocation = []
         }
 
         
         function setStop1() {
             
+            if(previewLine1){
+                previewLine1.remove(map)
+                
+            }
             if(previewLine){
                 previewLine.remove(map)
-                
             }
             if(currentLocation.length == 0){
                 document.getElementById("stop1Node").innerHTML = "Unselected";
@@ -203,17 +253,31 @@
             }else{
                 document.getElementById("stop1Node").innerHTML = currentLocation;
                 document.getElementById("stop1Button").innerHTML = "Set target node";
-                if(targetMarker){
-                    map.removeLayer(targetMarker);
+                if(marker1){
+                    map.removeLayer(marker1);
                 }
-                targetMarker = new L.marker(currentLocation).addTo(map);
+                marker1 = new L.marker(currentLocation).addTo(map);
                 
-                if(startMarker && targetMarker){
-                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                if(marker1 && marker2){
+                    previewLine1 = new L.Polyline([marker1.getLatLng(), marker2.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine1.addTo(map)
+                }else if(marker1 && targetMarker){
+                    previewLine1 = new L.Polyline([marker1.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine1.addTo(map)
+                }
+
+                if(startMarker && marker1){
+                    previewLine = new L.Polyline([startMarker.getLatLng(), marker1.getLatLng()], {
                         color: "purple",
                          weight: 3,})
                     previewLine.addTo(map)
                 }
+                targetedNode = currentLocation
+                
                 node1 = currentLocation
             }
             currentLocation = []
@@ -222,9 +286,11 @@
 
         function setStop2() {
             
-            if(previewLine){
-                previewLine.remove(map)
-                
+            if(previewLine2){
+                previewLine2.remove(map)
+            }
+            if(previewLine1){
+                previewLine1.remove(map)
             }
             if(currentLocation.length == 0){
                 document.getElementById("stop2Node").innerHTML = "Unselected";
@@ -233,17 +299,30 @@
             }else{
                 document.getElementById("stop2Node").innerHTML = currentLocation;
                 document.getElementById("stop2Button").innerHTML = "Set target node";
-                if(targetMarker){
-                    map.removeLayer(targetMarker);
+                if(marker2){
+                    map.removeLayer(marker2);
                 }
-                targetMarker = new L.marker(currentLocation).addTo(map);
+                marker2 = new L.marker(currentLocation).addTo(map);
                 
-                if(startMarker && targetMarker){
-                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                if(marker2 && marker3){
+                    previewLine2 = new L.Polyline([marker2.getLatLng(), marker3.getLatLng()], {
                         color: "purple",
                          weight: 3,})
-                    previewLine.addTo(map)
+                    previewLine2.addTo(map)
+                }else if(marker2 && targetMarker){
+                    previewLine2 = new L.Polyline([marker2.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine2.addTo(map)
                 }
+
+                if(marker1 && marker2){
+                    previewLine1 = new L.Polyline([marker1.getLatLng(), marker2.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine1.addTo(map)
+                }
+
                 node2 = currentLocation
             }
             currentLocation = []
@@ -252,9 +331,11 @@
 
         function setStop3() {
             
-            if(previewLine){
-                previewLine.remove(map)
-                
+            if(previewLine3){
+                previewLine3.remove(map)
+            }
+            if(previewLine2){
+                previewLine2.remove(map)
             }
             if(currentLocation.length == 0){
                 document.getElementById("stop3Node").innerHTML = "Unselected";
@@ -263,17 +344,30 @@
             }else{
                 document.getElementById("stop3Node").innerHTML = currentLocation;
                 document.getElementById("stop3Button").innerHTML = "Set target node";
-                if(targetMarker){
-                    map.removeLayer(targetMarker);
+                if(marker3){
+                    map.removeLayer(marker3);
                 }
-                targetMarker = new L.marker(currentLocation).addTo(map);
+                marker3 = new L.marker(currentLocation).addTo(map);
                 
-                if(startMarker && targetMarker){
-                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                if(marker3 && marker4){
+                    previewLine3 = new L.Polyline([marker3.getLatLng(), marker4.getLatLng()], {
                         color: "purple",
                          weight: 3,})
-                    previewLine.addTo(map)
+                    previewLine3.addTo(map)
+                }else if(marker3 && targetMarker){
+                    previewLine3 = new L.Polyline([marker3.getLatLng(), targetMarker.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine3.addTo(map)
                 }
+
+                if(marker2 && marker3){
+                    previewLine2 = new L.Polyline([marker2.getLatLng(), marker3.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine2.addTo(map)
+                }
+
                 node3 = currentLocation
             }
             currentLocation = []
@@ -282,9 +376,11 @@
 
         function setStop4() {
             
-            if(previewLine){
-                previewLine.remove(map)
-                
+            if(previewLine4){
+                previewLine4.remove(map)  
+            }
+            if(previewLine3){
+                previewLine3.remove(map)
             }
             if(currentLocation.length == 0){
                 document.getElementById("stop4Node").innerHTML = "Unselected";
@@ -293,17 +389,26 @@
             }else{
                 document.getElementById("stop4Node").innerHTML = currentLocation;
                 document.getElementById("stop4Button").innerHTML = "Set target node";
-                if(targetMarker){
-                    map.removeLayer(targetMarker);
+                if(marker4){
+                    map.removeLayer(marker4);
                 }
-                targetMarker = new L.marker(currentLocation).addTo(map);
+                marker4 = new L.marker(currentLocation).addTo(map);
                 
-                if(startMarker && targetMarker){
-                    previewLine = new L.Polyline([startMarker.getLatLng(), targetMarker.getLatLng()], {
+                if(marker4 && targetMarker){
+                    previewLine4 = new L.Polyline([marker4.getLatLng(), targetMarker.getLatLng()], {
                         color: "purple",
                          weight: 3,})
-                    previewLine.addTo(map)
+                    previewLine4.addTo(map)
                 }
+
+                if(marker3 && marker4){
+                    previewLine3 = new L.Polyline([marker3.getLatLng(), marker4.getLatLng()], {
+                        color: "purple",
+                         weight: 3,})
+                    previewLine3.addTo(map)
+                }
+
+
                 node4 = currentLocation
             }
             currentLocation = []
@@ -317,9 +422,13 @@
 
         function addStop(){
             //console.log("hi")
-            var nodes = ["setStop1","setStop2","setStop3","setStop4"];
-            document.getElementById(nodes[stopCounter]).style.display = "inline";
-            stopCounter++;
+            if(stopCounter < 4){
+                var nodes = ["setStop1","setStop2","setStop3","setStop4"];
+                document.getElementById(nodes[stopCounter]).style.display = "inline";
+                stopCounter++;
+            }else {
+                alert("Max stops reached")
+            }
         }
 
         function removeStop(){
@@ -331,15 +440,39 @@
                     document.getElementById(nodes[i]).style.display = "none";
                     document.getElementById(node2[i]).innerHTML = "Unselected";
                     if(i==0){
+                        currentLocation = targetedNode
                         node4 = undefined;
+                        map.removeLayer(marker4);
+                        marker4 = undefined;
+                        previewLine3.remove(map) 
+                        previewLine4.remove(map) 
+                        setTarget()
                     }else if (i==1){
+                        currentLocation = targetedNode
                         node3 = undefined;
+                        map.removeLayer(marker3);
+                        marker3 = undefined;
+                        previewLine2.remove(map) 
+                        previewLine3.remove(map) 
+                        setTarget()
                     }else if(i==2){
+                        currentLocation = targetedNode
                         node2 = undefined;
+                        map.removeLayer(marker2);
+                        marker2 = undefined;
+                        previewLine1.remove(map) 
+                        previewLine2.remove(map) 
+                        setTarget()
                     }else if (i==3){
+                        currentLocation = targetedNode
                         node1 = undefined;
+                        map.removeLayer(marker1);
+                        marker1 = undefined;
+                        previewLine.remove(map) 
+                        previewLine1.remove(map) 
+                        setTarget()
                     }
-                    stopCounter--;
+                    stopCounter = stopCounter - 1;
                     break;
                 }
             }
