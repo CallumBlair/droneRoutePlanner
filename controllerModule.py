@@ -3,7 +3,7 @@ import json
 
 import mapRepresentation as mr
 import aStarModule as a
-
+#import time
 
 #testStart = [-2.409343,50.713762]
 #testEnd = [-2.394243, 50.731368]
@@ -11,7 +11,7 @@ import aStarModule as a
 #testStart = [-2.385585, 50.725952]
 #testEnd = [-2.391425, 50.713372]
 
-
+#user Test1
 #testStart2 = [-2.394504547119141,50.732449679036556]
 #testEnd2 = [-2.4036455154418945,50.712562182791466]
 
@@ -26,7 +26,8 @@ def getRoute(start, end, username, node1, node2, node3, node4):
     gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     gdf = json.loads(gdf)
     boundaries = []
-        
+
+    #gridRoute = []
     
     for x in range (len(gdf["features"])):
         if gdf["features"][x]["properties"]["userName"] == username:
@@ -34,10 +35,10 @@ def getRoute(start, end, username, node1, node2, node3, node4):
 
     gdf = boundaries
     #boundaries = json.dumps(boundaries)
-    
+    #start_time = time.time()
     grid = mr.gridRep(gdf)
-
     tempGrid = grid.produceGrid(150,150)
+    #print("--- %s seconds ---" % (time.time() - start_time))
     graph = a.graph()
     graph.parseGrid(tempGrid)
     
@@ -46,6 +47,7 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         #astar.displayImage(tempGrid)
+        gridRoute = grid.routeConversion(route)
     elif node2 == [0,0]:
         cords = grid.stCoords(start, node1)
         astar = a.aStar(graph, cords[0], cords[1])
@@ -144,4 +146,4 @@ def getRoute(start, end, username, node1, node2, node3, node4):
 
     #"00000" + 
 
-#print(getRoute(testStart2, testEnd2))
+#print(getRoute(testStart2, testEnd2, "Test1", [0,0], [0,0], [0,0], [0,0]))

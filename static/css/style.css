@@ -15,7 +15,7 @@ body {
     padding-top: 4%;
 } 
 
-#setStart {
+#setStart{
     border-radius: 25px;
     border: 2px solid #6f746c;
     padding: 20px; 
@@ -27,3 +27,9 @@ body {
     padding: 20px; 
 }
 
+#setStop1, #setStop2, #setStop3, #setStop4 {
+    border-radius: 25px;
+    border: 2px solid #6f746c;
+    padding: 20px;   
+    background-color: #7e7d7d;
+}

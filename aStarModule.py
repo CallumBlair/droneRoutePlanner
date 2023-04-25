@@ -63,9 +63,10 @@ class Node:
     def getId(self):
         return str(self.id)
 
-    def addNeighbor(self, neighborId):
+    def addNeighbor(self, neighborId,weight):
         if neighborId not in self.neighbors:    
-            self.neighbors.append(neighborId)
+            self.neighbors.append([neighborId,weight])
+            #self.neighbors.append(neighborId)
 
     def numNeighbor(self):
         return len(self.neighbors)
@@ -103,12 +104,15 @@ class graph:
     def getNodes(self):
         return self.nodeDict.keys()
 
-    def addEdge(self, node1, node2):
+    def addEdge(self, node1, node2, weight):
         node1 = str(node1)
         node2 = str(node2)
         if node1 in self.nodeDict.keys() and node2 in self.nodeDict.keys():
-            self.nodeDict[node1].addNeighbor(node2)
-            self.nodeDict[node2].addNeighbor(node1)
+            self.nodeDict[node1].addNeighbor(node2,weight)
+            self.nodeDict[node2].addNeighbor(node1,weight)
+
+            #self.nodeDict[node1].addNeighbor(node2)
+            #self.nodeDict[node2].addNeighbor(node1)
 
 
     def addStart(self, nodeId):
@@ -126,7 +130,7 @@ class graph:
                     self.addNode(currentCord,currentId)
                     currentNeighbor = self.parseNeighbors(currentCord, grid)
                     for z in currentNeighbor:
-                        self.addEdge(currentId, str(z))
+                        self.addEdge(currentId, str(z),1)
                     
                 
     def parseNeighbors(self, coOrd, grid):
@@ -166,7 +170,11 @@ class aStar():
         return abs(node1.x - node2.x) + abs(node1.y - node2.y)
 
     def distance(self, parent, child):
-            distance = parent.distStart + 1
+            
+            for x in parent.neighbors:
+                if x[0] == child.getId():
+                    weight = x[1]
+            distance = parent.distStart + weight
 
             
             if child.parent == None:
@@ -215,7 +223,7 @@ class aStar():
 
             for nodes in currentNode.neighbors:
                 #print(nodes)
-                node = self.graph.getNode(nodes)
+                node = self.graph.getNode(nodes[0])
                 if node not in self.closed:
                     if node not in self.open:
                         self.open.append(node)
@@ -272,7 +280,7 @@ class aStar():
 #astar = aStar(graph, "000000000000", "0000032000000")
 #print(astar.manhattan(graph.getNode("00"),graph.getNode("78")))
 #route = astar.findPath()
-#astar.displayImage(testGrid2,route)
+#astar.displayImage(testGrid2)
 #graph.parseNeighbors([5,5], testGrid)
 
 ##graph = graph()

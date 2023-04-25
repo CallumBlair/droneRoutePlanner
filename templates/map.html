@@ -108,10 +108,10 @@
         var previewLine3;
         var previewLine4;
         var stopCounter = 0;
-        var node1;
-        var node2;
-        var node3;
-        var node4;
+        var node1 = [0,0];
+        var node2 = [0,0];
+        var node3 = [0,0];
+        var node4 = [0,0];
 
         document.getElementById("startNode").innerHTML = "Unselected"
         document.getElementById("targetNode").innerHTML = "Unselected"
@@ -424,7 +424,7 @@
             //console.log("hi")
             if(stopCounter < 4){
                 var nodes = ["setStop1","setStop2","setStop3","setStop4"];
-                document.getElementById(nodes[stopCounter]).style.display = "inline";
+                document.getElementById(nodes[stopCounter]).style.display = "block";
                 stopCounter++;
             }else {
                 alert("Max stops reached")
@@ -436,12 +436,12 @@
             var node2 = ["stop4Node","stop3Node","stop2Node","stop1Node"]
             console.log("hi")
             for(let i = 0; i<nodes.length; i++) {
-                if(document.getElementById(nodes[i]).style.display  == "inline"){
+                if(document.getElementById(nodes[i]).style.display  == "block"){
                     document.getElementById(nodes[i]).style.display = "none";
                     document.getElementById(node2[i]).innerHTML = "Unselected";
                     if(i==0){
                         currentLocation = targetedNode
-                        node4 = undefined;
+                        node4 = [0,0];
                         map.removeLayer(marker4);
                         marker4 = undefined;
                         previewLine3.remove(map) 
@@ -449,7 +449,7 @@
                         setTarget()
                     }else if (i==1){
                         currentLocation = targetedNode
-                        node3 = undefined;
+                        node3 = [0,0];
                         map.removeLayer(marker3);
                         marker3 = undefined;
                         previewLine2.remove(map) 
@@ -457,7 +457,7 @@
                         setTarget()
                     }else if(i==2){
                         currentLocation = targetedNode
-                        node2 = undefined;
+                        node2 = [0,0];
                         map.removeLayer(marker2);
                         marker2 = undefined;
                         previewLine1.remove(map) 
@@ -465,7 +465,7 @@
                         setTarget()
                     }else if (i==3){
                         currentLocation = targetedNode
-                        node1 = undefined;
+                        node1 = [0,0];
                         map.removeLayer(marker1);
                         marker1 = undefined;
                         previewLine.remove(map) 
@@ -496,14 +496,7 @@
         console.log(bound);
         var map = L.map('map').setView([50.71, -2.44], 13);
         
-        map.on("click", function (event){
-            //console.log(event.latlng.lat + ", " + event.latlng.lng);
-            currentLocation = [event.latlng.lat, event.latlng.lng]
-            if(marker) {
-                map.removeLayer(marker);
-            }
-            marker = new L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
-        })
+
 	    var popup = L.popup();
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -529,6 +522,14 @@
             }
             if (bound[i]["properties"]["boundaryType"] == "property"){
                 map.fitBounds(polygon.getBounds());
+                polygon.on("click", function (event){
+                    //console.log(event.latlng.lat + ", " + event.latlng.lng);
+                    currentLocation = [event.latlng.lat, event.latlng.lng]
+                    if(marker) {
+                        map.removeLayer(marker);
+                    }
+            marker = new L.marker([event.latlng.lat, event.latlng.lng]).addTo(map);
+        })
             }
 		    //polygon.bindPopup(bound["features"][i]["properties"]["desc"]);
             polygon.on("click", function (event) {
