@@ -5,7 +5,10 @@ import json
 
 app = Flask(__name__)
 
+gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
+app.secret_key = 'H}g7uZwOw/J05xD'
+app.config['SESSION_TYPE'] = 'filesystem'
 
 @app.route('/')
 def home():            
@@ -14,7 +17,7 @@ def home():
 
 @app.route('/map')
 def displayMap():
-    gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+    
     boundaries = []
     try:
         username = session["userName"]
@@ -98,8 +101,8 @@ def requestPath():
 
 if __name__ == "__main__":
     
-    gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+    #gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     #gdf2 = geopandas.read_file("propertyDetails.geojson")
-    app.secret_key = 'super secret key s'
-    app.config['SESSION_TYPE'] = 'filesystem'
+    #app.secret_key = 'super secret key s'
+    #app.config['SESSION_TYPE'] = 'filesystem'
     app.run(debug=True)
