@@ -14,6 +14,7 @@ def home():
 
 @app.route('/map')
 def displayMap():
+    gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     boundaries = []
     try:
         username = session["userName"]
