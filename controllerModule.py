@@ -22,6 +22,8 @@ import aStarModule as a
 #gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 #gdf = json.loads(gdf)
 
+
+
 def getRoute(start, end, username, node1, node2, node3, node4):
     gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     gdf = json.loads(gdf)
