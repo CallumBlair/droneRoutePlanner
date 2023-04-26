@@ -2,17 +2,18 @@
     padding: 0;
     float: right;
     width: 100%;
-    margin: 4px 0 0 0;
+    margin: 0 0 0 0;
     
 }
 
 #map { 
-    height: 100vh;
+    height: 85vh;
     width: 100vw;
 }
 
 body {
-    padding-top: 4%;
+    
+    
 } 
 
 #setStart{
@@ -32,4 +33,30 @@ body {
     border: 2px solid #6f746c;
     padding: 20px;   
     background-color: #7e7d7d;
+}
+
+.navbar{
+    height: 45px;
+}
+
+#barButton {
+    padding-top:20px;
+}
+
+#mySidebar {
+    padding-top:25px;
+}
+
+#myForm {
+    padding-right:10px;
+}
+
+#addStop {
+    padding-top:2px
+}
+
+#addStopDiv, #removeStopDiv, #requestRoute, #removeLineDiv {
+    border-radius: 25px;
+    border: 2px solid #6f746c;
+    padding: 20px; 
 }

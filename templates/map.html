@@ -3,7 +3,7 @@
 
 {% block content %} 
 <div id="content"> </div>
-        <div class="w3-sidebar w3-bar-block w3-animate-left w3-card w3-grey" style="width:25%" id="mySidebar">
+        <div class="w3-sidebar w3-bar-block w3-animate-left w3-card w3-grey" style="width:25%;" id="mySidebar">
           <button class="w3-bar-item w3-button w3-large"
           onclick="w3_close()">Close &times;</button>
           <div id="setStart">
@@ -43,11 +43,11 @@
           </div>
 
 
-          <div id="addStop">
+          <div id="addStopDiv">
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="addStop()" id="addStop">Add stop to route</button>
           </div>
 
-          <div id="removeStop">
+          <div id="removeStopDiv">
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="removeStop()" id="removeStop">Remove stop from route</button>
           </div>
 
@@ -58,7 +58,7 @@
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="fireRequest()" id="fireButton">Request Route</button>
           </div>
 
-          <div id="removeLine" style="display:none;">
+          <div id="removeLineDiv" style="display:none;">
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="removeLine()" id="removeLine">Remove currently displayed line</button>
           </div>
 
@@ -76,11 +76,11 @@
 
         </div>
    
-        <div class="w3-grey" style="width:100%;">
+        <div class="w3-grey" style="width:100%;" id="barButton">
           <button class="w3-button w3-grey w3-xlarge" onclick="w3_open()">&#9776;</button>
           <form id="myForm" action="/mapAuth" method="post" style="float:right;margin:10px 0 0 0;">
             <input type="text" name="userName" id="userName" value="{{username}}" >
-            <input type="submit" name="submitLogin" value="Login" id="submitLogin">
+            <input type="submit" name="submitLogin" value="Select Farm" id="submitLogin">
         </form>
           
         </div>
@@ -549,7 +549,7 @@
                         node4 = [0,0];
                         marker4 = undefined;
                         if(targetMarker){
-                            currentLocation = targetMarker.getLatLng()
+                            currentLocation = [targetMarker.getLatLng().lat, targetMarker.getLatLng().lng]
                             setTarget()
                         }
                     }else if (i==1){
@@ -563,7 +563,7 @@
                         node3 = [0,0];
                         marker3 = undefined;
                         if(targetMarker){
-                            currentLocation = targetMarker.getLatLng()
+                            currentLocation = [targetMarker.getLatLng().lat, targetMarker.getLatLng().lng]
                             setTarget()
                         }
                     }else if(i==2){
@@ -576,7 +576,7 @@
                         node2 = [0,0];
                         marker2 = undefined;
                         if(targetMarker){
-                            currentLocation = targetMarker.getLatLng()
+                            currentLocation = [targetMarker.getLatLng().lat, targetMarker.getLatLng().lng]
                             setTarget()
                         }
                     }else if (i==3){
@@ -591,7 +591,7 @@
                         node1 = [0,0];
                         marker1 = undefined;
                         if(targetMarker){
-                            currentLocation = targetMarker.getLatLng()
+                            currentLocation = [targetMarker.getLatLng().lat, targetMarker.getLatLng().lng]
                             setTarget()
                         }
                     }
