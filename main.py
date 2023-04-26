@@ -4,6 +4,7 @@ import geopandas
 import controllerModule as cm
 import json
 import pandas as pd
+from io import BytesIO
 
 #Define the flask application
 app = Flask(__name__)
@@ -131,12 +132,11 @@ def getRoute():
     if path != 1:
         dict = {"Path":path}
         df = pd.DataFrame(dict)
-        df.to_csv("temp.csv")
+        response_stream = BytesIO(df.to_csv().encode())
         return send_file(
-            "temp.csv",
+            response_stream,
             mimetype="text/csv",
-            download_name=user + "path.csv",
-            as_attachment=True)
+            download_name=user + "path.csv")
                     
 
 
