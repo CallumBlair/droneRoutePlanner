@@ -55,8 +55,12 @@ body {
     padding-top:2px
 }
 
-#addStopDiv, #removeStopDiv, #requestRoute, #removeLineDiv {
+#addStopDiv, #removeStopDiv, #requestRoute, #removeLineDiv, #requestDownloadDiv {
     border-radius: 25px;
     border: 2px solid #6f746c;
     padding: 20px; 
+}
+
+.home, .about {
+    padding-top:20px;
 }

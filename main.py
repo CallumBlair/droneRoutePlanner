@@ -1,8 +1,9 @@
 #Import Libraries
-from flask import Flask, render_template,request,redirect,url_for,jsonify,session
+from flask import Flask, render_template,request,redirect,url_for,jsonify,session,send_file
 import geopandas
 import controllerModule as cm
 import json
+import pandas as pd
 
 #Define the flask application
 app = Flask(__name__)
@@ -121,6 +122,23 @@ def requestPath():
     session['path'] = path
 
     return redirect("/map")
+
+
+@app.route('/getRoute')
+def getRoute():
+    user = session["userName"]
+    path = session["path"]
+    if path != 1:
+        dict = {"Path":path}
+        df = pd.DataFrame(dict)
+        df.to_csv("temp.csv")
+        return send_file(
+            "temp.csv",
+            mimetype="text/csv",
+            download_name=user + "path.csv",
+            as_attachment=True)
+                    
+
 
 if __name__ == "__main__":
     

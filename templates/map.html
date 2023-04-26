@@ -62,6 +62,12 @@
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="removeLine()" id="removeLine">Remove currently displayed line</button>
           </div>
 
+          <div id="requestDownloadDiv" style="display:hidden;">
+            <form action="/getRoute">
+                <input type="submit" value="Download Path as CSV" class="w3-bar-item w3-button" id="requestDownload"/>
+            </form>
+          </div>
+
           <div id="requestForm" style="visibility:hidden;"> 
             <form id="myForm" action="/requestPath" method="post"> 
                 <input type="hidden" id="stNode" name="stNode" value="">
@@ -197,7 +203,9 @@
 
         function removeLine(){
             line.remove(map)
-            document.getElementById("removeLine").style.display = "none";
+            document.getElementById("removeLineDiv").style.display = "none";
+            document.getElementById("requestDownload").value = "Download previous path as CSV";
+
         }
 
 
@@ -677,10 +685,12 @@
             });
             line.addTo(map);
             
+            
         };
 
         if(line){
-            document.getElementById("removeLine").style.display = "block";
+            document.getElementById("removeLineDiv").style.display = "block";
+            document.getElementById("requestDownloadDiv").style.display = "block";
         }
 
         /*
