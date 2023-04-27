@@ -1,6 +1,42 @@
 class gridRep():
-
+    """ gridRep class
+        allows for the creation and usage of grids that represent real world enviroments
+        usage:
+            gdf = geopandas.read_file("propertyDetails(Test1).geojson").to_json()
+            rep = gridRep(gdf)
+            rep.produceGrid(65,65)
+            for x in rep.grid:
+                print(x)
+                
+        functions:
+            __init__(gpd)
+            createGrid(sizeX, sizeY)
+            createPreGrid(sizeX, sizeY, multi)
+            outerBoundary()
+            ccw(A,B,C)
+            intersect(A,B,C,D)
+            markPreOuterBoundary()
+            markPreObstacles()
+            updateGrid()
+            markOuterBoundary()
+            markObstacles()
+            stCoords(start, target)
+            routeConversion(route)
+            produceGrid(sizeX, sizeY)
+    """
     def __init__(self, gpd):
+        """ __init__
+            Initializes self attributes
+            parameters:
+                self.geopandas: stores the geopandas data
+                self.grid: stores the final grid
+                self.preGrid: stores the pre-pass lower resolution grid
+                self.minMax: stores the minimum and maximum X and Y values for the grid
+                self.target: stores the target lat-lng
+                self.start: stores the start lat-lng
+                self.startGrid: stores the start grid coordinates
+                self.targetGrid: stores the target grid coordinates
+        """
         self.geopandas = gpd
         self.grid = []
         self.preGrid = []
@@ -11,6 +47,11 @@ class gridRep():
         self.targetGrid = []
 
     def createGrid(self, sizeX, sizeY):
+        """ createGrid
+            creates a grid of the given size storing it in self.grid
+            parameters:
+                grid: used to store the temporary two dimensional array when creating the grid
+        """
         grid = []
         for x in range(sizeX):
             tempgrid = []
@@ -20,7 +61,12 @@ class gridRep():
         self.grid = grid
         return None
 
-    def createPreGrid(self, sizeX, sizeY,multi):
+    def createPreGrid(self, sizeX, sizeY, multi):
+        """ createPreGrid
+            creates a grid of the given size storing it in self.preGrid
+            parameters:
+                grid: used to store the temporary two dimensional array when creating the grid
+        """
         grid = []
         for x in range(int(sizeX/multi)):
             tempgrid = []
@@ -32,7 +78,10 @@ class gridRep():
 
         
     def outerBoundary(self):
-        #featureArr = self.geopandas["features"]
+        """ outerBoundary
+            generates the min and max X and Y values for the created grid
+            storing these values in self.minMax
+        """
         featureArr = self.geopandas
         maxX = featureArr[0]["geometry"]["coordinates"][0][0][0]
         maxY = featureArr[0]["geometry"]["coordinates"][0][0][1]
@@ -57,15 +106,38 @@ class gridRep():
 
 
     def ccw(self, A,B,C):
+        """ ccw
+            checks if the three given points are in counter clockwise order
+        """
         return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
 
     def intersect(self, A,B,C,D):
+        """ intersect
+            returns if the two lines A-B and C-D intersect            
+        """
         return self.ccw(A,C,D) != self.ccw(B,C,D) and self.ccw(A,B,C) != self.ccw(A,B,D)
 
 
 
 
     def markPreOuterBoundary(self):
+        """ markPreOuterBoundary
+            sets the area within the property boundary to 0 within the preGrid
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+                -lines: array that will store each line making up the property polygon
+                -minPoint: stores a point outside the grid at the equivalent of -1,-1
+                
+        """
         minMax = self.minMax
         grid = self.preGrid
         gridX = len(grid)
@@ -76,10 +148,10 @@ class gridRep():
         heightSpacing = height/gridY
         minX = minMax[2]
         minY = minMax[3]
-        #points = []
         lines = []
+        
         minPoint = [minX - widthSpacing, minY - heightSpacing]
-        #featureArr = self.geopandas["features"]
+        
         featureArr = self.geopandas
         for f in featureArr:
             if f["properties"]["boundaryType"] == "property":
@@ -96,15 +168,14 @@ class gridRep():
                     bottomRight = [((x+1)*widthSpacing)+minX, (y*heightSpacing)+minY]
                     topLeft = [(x*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
                     topRight = [((x+1)*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
-                    #points.append([bottomLeft,bottomRight,topLeft,topRight,[x,y]])
-                    #print(bottomLeft)
+                    
                     hitCounterbl = 0
                     hitCounterbr = 0
                     hitCountertl = 0
                     hitCountertr = 0
+                    
                     for s in lines:
                         if self.intersect([bottomLeft[0], bottomLeft[1]],minPoint,s[0],s[1]):
-                        #and self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]) and self.intersect([topLeft[0], topLeft[1]],minPoint,s[0],s[1]) and self.intersect([topRight[0], topRight[1]],minPoint,s[0],s[1]):
                             hitCounterbl = hitCounterbl + 1
                         if self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]):
                             hitCounterbr = hitCounterbr + 1
@@ -122,6 +193,22 @@ class gridRep():
 
 
     def markPreObstacles(self):
+        """ markPreObstacles
+            marks the areas of the preGrid that fall within an obstacle
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+                -minPoint: stores a point outside the grid at the equivalent of -1,-1
+                
+        """
         minMax = self.minMax
         grid = self.preGrid
         gridX = len(grid)
@@ -132,12 +219,9 @@ class gridRep():
         heightSpacing = height/gridY
         minX = minMax[2]
         minY = minMax[3]
-        #points = []
+        
         minPoint = [minX - widthSpacing, minY - heightSpacing]
         
-
-        
-        #featureArr = self.geopandas["features"]
         featureArr = self.geopandas
         obstacles = []
         for f in featureArr:
@@ -159,15 +243,13 @@ class gridRep():
                         bottomRight = [((x+1)*widthSpacing)+minX, (y*heightSpacing)+minY]
                         topLeft = [(x*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
                         topRight = [((x+1)*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
-                        #points.append([bottomLeft,bottomRight,topLeft,topRight,[x,y]])
-                        #print(bottomLeft)
+                        
                         hitCounterbl = 0
                         hitCounterbr = 0
                         hitCountertl = 0
                         hitCountertr = 0
                         for s in lines:
                             if self.intersect([bottomLeft[0], bottomLeft[1]],minPoint,s[0],s[1]):
-                            #and self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]) and self.intersect([topLeft[0], topLeft[1]],minPoint,s[0],s[1]) and self.intersect([topRight[0], topRight[1]],minPoint,s[0],s[1]):
                                 hitCounterbl = hitCounterbl + 1
                             if self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]):
                                 hitCounterbr = hitCounterbr + 1
@@ -183,6 +265,9 @@ class gridRep():
 
 
     def updateGrid(self,multi):
+        """ updateGrid
+            transfers the lower-resolution preGrid information to the main grid
+        """
         preGrid = self.preGrid
         grid = self.grid
 
@@ -198,6 +283,22 @@ class gridRep():
     
 
     def markOuterBoundary(self):
+        """ markOuterBoundary
+            sets the area within the property boundary to 0 within the Grid
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+                -lines: array that will store each line making up the property polygon
+                -minPoint: stores a point outside the grid at the equivalent of -1,-1
+        """
         minMax = self.minMax
         grid = self.grid
         gridX = len(grid)
@@ -208,10 +309,10 @@ class gridRep():
         heightSpacing = height/gridY
         minX = minMax[2]
         minY = minMax[3]
-        #points = []
+
         lines = []
         minPoint = [minX - widthSpacing, minY - heightSpacing]
-        #featureArr = self.geopandas["features"]
+ 
         featureArr = self.geopandas
         for f in featureArr:
             if f["properties"]["boundaryType"] == "property":
@@ -228,16 +329,13 @@ class gridRep():
                     bottomRight = [((x+1)*widthSpacing)+minX, (y*heightSpacing)+minY]
                     topLeft = [(x*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
                     topRight = [((x+1)*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
-                    #points.append([bottomLeft,bottomRight,topLeft,topRight,[x,y]])
-                    #print(bottomLeft)
                     hitCounterbl = 0
                     hitCounterbr = 0
                     hitCountertl = 0
                     hitCountertr = 0
                     for s in lines:
                         if self.intersect([bottomLeft[0], bottomLeft[1]],minPoint,s[0],s[1]):
-                        #and self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]) and self.intersect([topLeft[0], topLeft[1]],minPoint,s[0],s[1]) and self.intersect([topRight[0], topRight[1]],minPoint,s[0],s[1]):
-                            hitCounterbl = hitCounterbl + 1
+                             hitCounterbl = hitCounterbl + 1
                         if self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]):
                             hitCounterbr = hitCounterbr + 1
                         if self.intersect([topLeft[0], topLeft[1]],minPoint,s[0],s[1]):
@@ -254,6 +352,22 @@ class gridRep():
                         
                 
     def markObstacles(self):
+        """ markObstacles
+            marks the areas of the Grid that fall within an obstacle
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+                -minPoint: stores a point outside the grid at the equivalent of -1,-1
+                
+        """
         minMax = self.minMax
         grid = self.grid
         gridX = len(grid)
@@ -264,18 +378,14 @@ class gridRep():
         heightSpacing = height/gridY
         minX = minMax[2]
         minY = minMax[3]
-        #points = []
+
         minPoint = [minX - widthSpacing, minY - heightSpacing]
         
-
-        
-        #featureArr = self.geopandas["features"]
         featureArr = self.geopandas
         obstacles = []
         for f in featureArr:
             if f["properties"]["boundaryType"] == "obstacle":
                 obstacles.append(f["geometry"]["coordinates"][0])
-        
         
         for obstacle in obstacles:
  
@@ -291,15 +401,13 @@ class gridRep():
                         bottomRight = [((x+1)*widthSpacing)+minX, (y*heightSpacing)+minY]
                         topLeft = [(x*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
                         topRight = [((x+1)*widthSpacing)+minX, ((y+1)*heightSpacing)+minY]
-                        #points.append([bottomLeft,bottomRight,topLeft,topRight,[x,y]])
-                        #print(bottomLeft)
+                        
                         hitCounterbl = 0
                         hitCounterbr = 0
                         hitCountertl = 0
                         hitCountertr = 0
                         for s in lines:
                             if self.intersect([bottomLeft[0], bottomLeft[1]],minPoint,s[0],s[1]):
-                            #and self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]) and self.intersect([topLeft[0], topLeft[1]],minPoint,s[0],s[1]) and self.intersect([topRight[0], topRight[1]],minPoint,s[0],s[1]):
                                 hitCounterbl = hitCounterbl + 1
                             if self.intersect([bottomRight[0], bottomRight[1]],minPoint,s[0],s[1]):
                                 hitCounterbr = hitCounterbr + 1
@@ -314,6 +422,20 @@ class gridRep():
         return None
 
     def stCoords(self, start, target):
+        """ stCoords
+            returns the grid coordinates of the start and target nodes
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+        """
         minMax = self.minMax
         grid = self.grid
         gridX = len(grid)
@@ -335,6 +457,21 @@ class gridRep():
         return [self.startGrid, self.targetGrid]
         
     def routeConversion(self, route):
+        """ routeConversion
+            converts the grid coordinate route to a lat-lng route and returns this route
+            parameters:
+                -minMax: self.minMax
+                -grid: self.grid
+                -gridX: the max length of the grid on the X axis
+                -gridY: the max length of the grid on the Y axis
+                -width = the width of the grid in the real world lat-lng
+                -height = the height of the grid in the real world lat-lng
+                -widthSpacing: the width of each square in the grid in the real world
+                -heightSpacing: the height of each square in the grid in the real world
+                -minX: the minimum X value
+                -minY: the minimum Y value
+                -convertedRoute: array that stores the converted route
+        """
         minMax = self.minMax
         grid = self.grid
         gridX = len(grid)
@@ -360,6 +497,10 @@ class gridRep():
 
         
     def produceGrid(self, sizeX, sizeY):
+        """ produceGrid
+            a function simplifying the process of creating a grid buy condensing all the main steps into a single function
+            returning the final grid
+        """
         self.createGrid(sizeX, sizeY)
         self.createPreGrid(sizeX, sizeY,5)
         self.outerBoundary()
@@ -374,18 +515,3 @@ class gridRep():
 
 
 
-
-#gdf = geopandas.read_file("propertyDetails(old).geojson").to_json()
-        
-#rep = gridRep(gdf)
-#rep.produceGrid(65,65)
-#rep.createGrid(65,65)
-#rep.outerBoundary()
-#rep.markOuterBoundary()
-#rep.markObstacles()
-
-#for x in rep.grid:
-#    print(x)
-#print(rep.outerBoundary())
-#sd = rep.markOuterBoundary(rep.createGrid(65,65), rep.outerBoundary())
-#rep.markObstacles(sd,rep.outerBoundary())

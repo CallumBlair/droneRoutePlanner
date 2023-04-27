@@ -5,50 +5,47 @@ import mapRepresentation as mr
 import aStarModule as a
 #import time
 
-#testStart = [-2.409343,50.713762]
-#testEnd = [-2.394243, 50.731368]
-
-#testStart = [-2.385585, 50.725952]
-#testEnd = [-2.391425, 50.713372]
-
-#user Test1
-#testStart2 = [-2.394504547119141,50.732449679036556]
-#testEnd2 = [-2.4036455154418945,50.712562182791466]
-
-#testStart2 = [50.732449,-2.394504]
-#testEnd2 =   [50.712562,-2.403645]
-
-
-#gdf = geopandas.read_file("propertyDetails.geojson").to_json()
-#gdf = json.loads(gdf)
-
-
-
 def getRoute(start, end, username, node1, node2, node3, node4):
+    """ getRoute function
+        returns a route between the requested nodes
+        Example usage:
+            gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+            gdf = json.loads(gdf)
+            testStart2 = [-2.394504547119141,50.732449679036556]
+            testEnd2 = [-2.4036455154418945,50.712562182791466]
+            getRoute(testStart2, testEnd2, "Test1", [0,0], [0,0], [0,0], [0,0])
+        parameters:
+            -start, end, node1, node2, node3, node4: the nodes the user has requested a route between
+            -username: the name of the farm
+            -gdf: stores the geojson information
+            -boundaries: stores the boundaries for the specified username
+            -grid: mapRepresentation object
+            -tempGrid: stores the grid produced by the mapRepresentation module
+            -graph: graph object from the aStarModule
+            -cords: stores the grid co-ordinates of the start and target nodes of a path
+            
+    """
+    
     gdf = geopandas.read_file("propertyDetails.geojson").to_json()
     gdf = json.loads(gdf)
     boundaries = []
-
-    #gridRoute = []
     
     for x in range (len(gdf["features"])):
         if gdf["features"][x]["properties"]["userName"] == username:
             boundaries.append(gdf["features"][x])
 
     gdf = boundaries
-    #boundaries = json.dumps(boundaries)
-    #start_time = time.time()
     grid = mr.gridRep(gdf)
     tempGrid = grid.produceGrid(150,150)
-    #print("--- %s seconds ---" % (time.time() - start_time))
     graph = a.graph()
     graph.parseGrid(tempGrid)
-    
+
+
+    #Different processes depending on the number of nodes in the requested path
     if node1 == [0,0]:
         cords = grid.stCoords(start, end)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
-        #astar.displayImage(tempGrid)
         gridRoute = grid.routeConversion(route)
     elif node2 == [0,0]:
         cords = grid.stCoords(start, node1)
@@ -138,14 +135,7 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         gridRoute = gridRoute + grid.routeConversion(route)
 
         
-    #return(str(route))
     return gridRoute                                                
-    #return grid.routeConversion(route)
                                                      
                                                     
-
-    #print(route)
-
-    #"00000" + 
-
 #print(getRoute(testStart2, testEnd2, "Test1", [0,0], [0,0], [0,0], [0,0]))
