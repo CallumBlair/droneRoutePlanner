@@ -2,11 +2,16 @@ class gridRep():
     """ gridRep class
         allows for the creation and usage of grids that represent real world enviroments
         usage:
-            gdf = geopandas.read_file("propertyDetails(Test1).geojson").to_json()
+            gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+            gdf = json.loads(gdf)
+            boundaries = []
+            for x in range (len(gdf["features"])):
+                if gdf["features"][x]["properties"]["userName"] == "Test1":
+                    boundaries.append(gdf["features"][x])
+
+            gdf = boundaries
             rep = gridRep(gdf)
-            rep.produceGrid(65,65)
-            for x in rep.grid:
-                print(x)
+            rep.produceGrid(30,30)
                 
         functions:
             __init__(gpd)
@@ -512,6 +517,7 @@ class gridRep():
         self.markOuterBoundary()
         self.markObstacles()
         return self.grid
+
 
 
 
