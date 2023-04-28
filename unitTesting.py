@@ -84,7 +84,7 @@ class testMapRep(unittest.TestCase):
         gdf = json.loads(gdf)
         boundaries = []
         for x in range (len(gdf["features"])):
-            if gdf["features"][x]["properties"]["userName"] == "Test1":
+            if gdf["features"][x]["properties"]["userName"] == "Farm1":
                 boundaries.append(gdf["features"][x])
         gdf = boundaries
         rep = mr.gridRep(gdf)
@@ -96,7 +96,7 @@ class testMapRep(unittest.TestCase):
         gdf = json.loads(gdf)
         boundaries = []
         for x in range (len(gdf["features"])):
-            if gdf["features"][x]["properties"]["userName"] == "Test2":
+            if gdf["features"][x]["properties"]["userName"] == "Farm2":
                 boundaries.append(gdf["features"][x])
         gdf = boundaries
         rep = mr.gridRep(gdf)
