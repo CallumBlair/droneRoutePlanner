@@ -110,6 +110,8 @@ function removeLine(){
     line.remove(map)
     document.getElementById("removeLineDiv").style.display = "none";
     document.getElementById("requestDownload").value = "Download previous path as CSV";
+    map.removeLayer(lineMarkerStart);
+    map.removeLayer(lineMarkerEnd);
 
 }
 

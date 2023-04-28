@@ -111,6 +111,8 @@
         var marker2;
         var marker3;
         var marker4;
+        var lineMarkerStart;
+        var lineMarkerEnd;
         
         var previewLine;
         var previewLine1;
@@ -195,7 +197,8 @@
                 weight: 3,
             });
             line.addTo(map);
-            
+            lineMarkerEnd = new L.marker([path[0][1], path[0][0]], {icon: lineIcon}).addTo(map);
+            lineMarkerStart = new L.marker([path[path.length-1][1], path[path.length-1][0]], {icon: lineIcon}).addTo(map);
             
         };
 
