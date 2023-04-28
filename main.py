@@ -1,5 +1,5 @@
 #Import Libraries
-from flask import Flask, render_template,request,redirect,url_for,jsonify,session,send_file,send_from_directory
+from flask import Flask, render_template,request,redirect,url_for,jsonify,session,send_file
 import geopandas
 import controllerModule as cm
 import json
