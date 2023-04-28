@@ -1,15 +1,23 @@
 function w3_open() {
+    /*  w3_open
+        Opens the sidebar
+     */
     document.getElementById("mySidebar").style.display = "block";
     document.getElementById("maper").style.width = "75%";
 }
 
 function w3_close() {
+    /*  w3_close
+        closes the sidebar
+     */
     document.getElementById("mySidebar").style.display = "none";
     document.getElementById("maper").style.width = "100%";
 }
 
 function addStop(){
-    //console.log("hi")
+    /*  addStop
+        adds another stop to the side bar up to a max of 4
+    */
     if(stopCounter < 4){
         var nodes = ["setStop1","setStop2","setStop3","setStop4"];
         document.getElementById(nodes[stopCounter]).style.display = "block";
@@ -20,6 +28,9 @@ function addStop(){
 }
 
 function removeStop(){
+    /*  removeStop
+        removes a stop from the side bar, redrawing the preview lines that need redrawing
+    */
     if(stopCounter > 0){
         stopCounter = stopCounter - 1;
     }
@@ -31,7 +42,7 @@ function removeStop(){
             document.getElementById(nodes[i]).style.display = "none";
             document.getElementById(node2[i]).innerHTML = "Unselected";
             if(i==0){
-                //currentLocation = targetedNode
+                
                 try{
                     previewLine3.remove(map) 
                     previewLine4.remove(map)
@@ -44,7 +55,7 @@ function removeStop(){
                     setTarget()
                 }
             }else if (i==1){
-                //currentLocation = targetedNode
+                
                 try{
                 previewLine2.remove(map) 
                 previewLine3.remove(map) 
@@ -58,7 +69,7 @@ function removeStop(){
                     setTarget()
                 }
             }else if(i==2){
-                //currentLocation = targetedNode
+                
                 try{
                     previewLine1.remove(map) 
                     previewLine2.remove(map) 
@@ -71,7 +82,7 @@ function removeStop(){
                     setTarget()
                 }
             }else if (i==3){
-                //currentLocation = targetedNode
+                
                 try {
                     previewLine.remove(map);
                     previewLine1.remove(map);
@@ -93,6 +104,9 @@ function removeStop(){
 }
 
 function removeLine(){
+    /*  removeLine
+        removes the currently drawn route line from the map
+    */
     line.remove(map)
     document.getElementById("removeLineDiv").style.display = "none";
     document.getElementById("requestDownload").value = "Download previous path as CSV";
@@ -101,6 +115,9 @@ function removeLine(){
 
 
 function fireRequest(){
+    /*  fireRequest
+        sends a post request to the flask server with the selected nodes
+    */
     if(document.getElementById("startNode").innerHTML == "Unselected" || document.getElementById("targetNode").innerHTML == "Unselected"){
         alert("Ensure both start and target nodes are selected")
     }else{

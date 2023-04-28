@@ -1,4 +1,7 @@
 function setStart() {
+    /*  setStart
+        sets the starting node to the current marker placed on the map
+    */
     if(previewLine){
         previewLine.remove(map)
                 
@@ -35,6 +38,9 @@ function setStart() {
 }
 
 function setStop1() {
+    /*  setStop1
+        sets the stop1 node to the current marker placed on the map
+    */
     if(startMarker){
         if(previewLine1){
             previewLine1.remove(map)
@@ -85,6 +91,9 @@ function setStop1() {
 
 
 function setStop2() {
+    /*  setStop2
+        sets the stop2 node to the current marker placed on the map
+    */
     if(marker1){
         if(previewLine2){
             previewLine2.remove(map)
@@ -133,6 +142,9 @@ function setStop2() {
 
 
 function setStop3() {
+    /*  setStop3
+        sets the stop3 node to the current marker placed on the map
+    */
     if(marker2){
         if(previewLine3){
             previewLine3.remove(map)
@@ -181,6 +193,9 @@ function setStop3() {
 
 
 function setStop4() {
+    /*  setStop4
+        sets the stop4 node to the current marker placed on the map
+    */
     if(marker3){
         if(previewLine4){
             previewLine4.remove(map)  
@@ -224,6 +239,9 @@ function setStop4() {
 }
 
 function setTarget() {
+    /*  setTarget
+        sets the target node to the current marker placed on the map
+    */
     if((stopCounter == 0 && startMarker)||(stopCounter == 1 && marker1)||(stopCounter == 2 && marker2)||(stopCounter == 3 && marker3)||(stopCounter == 4 && marker4)){
         if(currentLocation.length == 0){
             document.getElementById("targetNode").innerHTML = "Unselected";
