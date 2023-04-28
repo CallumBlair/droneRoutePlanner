@@ -1,5 +1,5 @@
 #Import Libraries
-from flask import Flask, render_template,request,redirect,url_for,jsonify,session,send_file
+from flask import Flask, render_template,request,redirect,url_for,jsonify,session,send_file,send_from_directory
 import geopandas
 import controllerModule as cm
 import json
@@ -15,14 +15,19 @@ app.config['SESSION_TYPE'] = 'filesystem'
 gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
 ####################
-
+"""
 @app.before_request
 def before_request():
     if not request.is_secure and __name__ == "__main__":
         url = request.url.replace('http://', 'https://', 1)
         return redirect(url)
-
+"""
 #####################
+
+
+#@app.route('/favicon.ico')
+#def favicon():
+#    return url_for('static', filename='css/favicon.ico')
 
 @app.route('/')
 def index():
@@ -165,4 +170,3 @@ if __name__ == "__main__":
 
 
 
-    
