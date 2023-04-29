@@ -15,19 +15,15 @@ app.config['SESSION_TYPE'] = 'filesystem'
 gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
 ####################
-"""
+
 @app.before_request
 def before_request():
     if not request.is_secure and __name__ == "__main__":
         url = request.url.replace('http://', 'https://', 1)
         return redirect(url)
-"""
+
 #####################
 
-
-#@app.route('/favicon.ico')
-#def favicon():
-#    return url_for('static', filename='css/favicon.ico')
 
 @app.route('/')
 def index():
@@ -102,6 +98,7 @@ def requestPath():
         -targetNodeStr: the target node retrieved from the form
         -node1Arr: the starting node retrieved from the form
     """
+    session["path"] = [1]
     username = session["userName"]
     startNodeStr = request.form['stNode']
     targetNodeStr = request.form['tgtNode']

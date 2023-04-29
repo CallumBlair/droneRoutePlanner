@@ -1,3 +1,5 @@
+
+
 #Example grids for use in testing
 testGrid = [[0,0,1,0,0,0,0,0,0],
             [0,0,1,0,0,0,0,0,0],

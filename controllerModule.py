@@ -47,13 +47,16 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         gridRoute = grid.routeConversion(route)
+        
     elif node2 == [0,0]:
         cords = grid.stCoords(start, node1)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = grid.routeConversion(route)
-        
+
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node1, end)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
@@ -66,13 +69,16 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         route.reverse()
         gridRoute = grid.routeConversion(route)
 
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node1, node2)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
 
-        
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node2, end)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
@@ -86,18 +92,26 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         route.reverse()
         gridRoute = grid.routeConversion(route)
 
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node1, node2)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
 
+
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node2, node3)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
-        
+
+
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         cords = grid.stCoords(node3, end)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
@@ -110,11 +124,17 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         route.reverse()
         gridRoute = grid.routeConversion(route)
 
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
+
         cords = grid.stCoords(node1, node2)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
+
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
 
         cords = grid.stCoords(node2, node3)
         astar = a.aStar(graph, cords[0], cords[1])
@@ -122,11 +142,17 @@ def getRoute(start, end, username, node1, node2, node3, node4):
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
 
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
+
         cords = grid.stCoords(node3, node4)
         astar = a.aStar(graph, cords[0], cords[1])
         route = astar.findPath()
         route.reverse()
         gridRoute = gridRoute + grid.routeConversion(route)
+
+        graph = a.graph()
+        graph.parseGrid(tempGrid)
         
         cords = grid.stCoords(node4, end)
         astar = a.aStar(graph, cords[0], cords[1])
