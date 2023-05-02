@@ -16,13 +16,13 @@ app.config['SESSION_TYPE'] = 'filesystem'
 gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
 #################### Uncomment before commit
-"""
+
 @app.before_request
 def before_request():
     if not request.is_secure and __name__ == "__main__":
         url = request.url.replace('http://', 'https://', 1)
         return redirect(url)
-"""
+
 #####################
 
 
