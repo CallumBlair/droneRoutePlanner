@@ -78,6 +78,7 @@ parseGraphExpectedResult = ['000000000001', '000000000002', '000000000003', '000
 
 
 
+
 class testMapRep(unittest.TestCase):
     def testFarm1(self):
         gdf = geopandas.read_file("propertyDetails.geojson").to_json()
@@ -103,6 +104,13 @@ class testMapRep(unittest.TestCase):
         rep.produceGrid(30,30)
         self.assertEqual(rep.grid, test2MapRep, "inccorect map representation")
 
+    def testPathOptimization(self):
+        gdf = geopandas.read_file("propertyDetails.geojson").to_json()
+        gdf = json.loads(gdf)
+        rep = mr.gridRep(gdf)
+        testPath = [[1,1],[2,2],[3,3],[3,4],[3,5],[3,6],[3,7],[2,7],[1,7],[1,8],[1,9]]
+        expectedPath = [[1,1], [3,3], [3,7], [1,7], [1,9]]
+        self.assertEqual(rep.optimizeRoute(testPath), expectedPath, "incorrect path optimization")
 
 
 class nodeTesting(unittest.TestCase):
@@ -120,8 +128,6 @@ class nodeTesting(unittest.TestCase):
         node = a.Node([45,100], "45100")
         node.addNeighbor("44100",1)
         self.assertEqual(node.getNeighbors(), [["44100", 1]], "neighbor creation failed")
-
-
 
 class graphTesting(unittest.TestCase):
     def testGraphCreation(self):

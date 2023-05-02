@@ -11,17 +11,18 @@ app = Flask(__name__)
 app.secret_key = 'H}g7uZwOw/J05xD'
 app.config['SESSION_TYPE'] = 'filesystem'
 
+
 #Open the geojson file storing property details
 gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
-####################
-
+#################### Uncomment before commit
+"""
 @app.before_request
 def before_request():
     if not request.is_secure and __name__ == "__main__":
         url = request.url.replace('http://', 'https://', 1)
         return redirect(url)
-
+"""
 #####################
 
 
@@ -162,8 +163,8 @@ def getRoute():
 
 
 if __name__ == "__main__":
-    
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run()
 
 
 

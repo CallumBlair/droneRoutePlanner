@@ -519,5 +519,47 @@ class gridRep():
         return self.grid
 
 
+    def optimizeRoute(self, route):
+        """ OptimizeRoute
+            a function that removes unneeded points on a path, for example simplifying a straight line to just the first and last
+            coordinate.
+        """
+        toRemove = []
+        for x in range (1, len(route)-1):
+            current = route[x]
+            before = route[x-1]
+            after = route[x+1]
+            if self.isBetween(before, after, current):
+                toRemove.append(current)
+        for x in toRemove:
+            route.remove(x)
+        
+        return route
+                
+
+
+
+    def isBetween(self, a, b, c):
+        """ isBetween
+            tests if a node (c) would fall on the line a,b
+        """
+        crossproduct = (c[1] - a[1]) * (b[0] - a[0]) - (c[0]-a[0]) * (b[1] - a[1])
+        if abs(crossproduct) != 0:
+            return False
+
+        dotproduct = (c[0] - a[0]) * (b[0] - a[0]) + (c[1]-a[1]) * (b[1]-a[1])
+
+        if dotproduct < 0:
+            return False
+
+        squaredlengthba = (b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1])
+        if dotproduct > squaredlengthba:
+            return False
+
+        return True
+                                                        
+                                                        
+        
+
 
 
