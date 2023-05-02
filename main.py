@@ -19,9 +19,9 @@ gdf = geopandas.read_file("propertyDetails.geojson").to_json()
 
 @app.before_request
 def before_request():
-    if not request.is_secure and __name__ == "__main__":
+    if not request.is_secure:
         url = request.url.replace('http://', 'https://', 1)
-        return redirect(url)
+        return redirect(url, code=301)
 
 #####################
 
