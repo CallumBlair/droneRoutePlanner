@@ -12,9 +12,12 @@
 	<script src="static/route.js"></script>
 	<script src="static/sidebar.js"></script>
 	
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='css/images/favicon.ico') }}">
 	
+		
 	<title>Drone Route Planner</title> 
+	
+	
 
 	{% set active_page = active_page|default('home') -%}  
     {% set navigation_bar = [('/', 'home', 'Home'), ('/about', 'about', 'About'), ('/map','map','Map')] -%}
