@@ -110,17 +110,17 @@ class gridRep():
         return None
 
 
-    def ccw(self, A,B,C):
+    def counterClockwise(self, a,b,c):
         """ ccw
             checks if the three given points are in counter clockwise order
         """
-        return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
+        return (c[1]-a[1]) * (b[0]-a[0]) > (b[1]-a[1]) * (c[0]-a[0])
 
-    def intersect(self, A,B,C,D):
+    def intersect(self, a,b,c,d):
         """ intersect
             returns if the two lines A-B and C-D intersect            
         """
-        return self.ccw(A,C,D) != self.ccw(B,C,D) and self.ccw(A,B,C) != self.ccw(A,B,D)
+        return self.counterClockwise(a,c,d) != self.counterClockwise(b,c,d) and self.counterClockwise(a,b,c) != self.counterClockwise(a,b,d)
 
 
 
@@ -521,8 +521,8 @@ class gridRep():
 
     def optimizeRoute(self, route):
         """ OptimizeRoute
-            a function that removes unneeded points on a path, for example simplifying a straight line to just the first and last
-            coordinate.
+            a function that removes unneeded points on a path, for example
+            simplifying a straight line to just the first and last coordinate.
         """
         toRemove = []
         for x in range (1, len(route)-1):
@@ -543,17 +543,17 @@ class gridRep():
         """ isBetween
             tests if a node (c) would fall on the line a,b
         """
-        crossproduct = (c[1] - a[1]) * (b[0] - a[0]) - (c[0]-a[0]) * (b[1] - a[1])
-        if abs(crossproduct) != 0:
+        cproduct = (c[1] - a[1]) * (b[0] - a[0]) - (c[0]-a[0]) * (b[1] - a[1])
+        if abs(cproduct) != 0:
             return False
 
-        dotproduct = (c[0] - a[0]) * (b[0] - a[0]) + (c[1]-a[1]) * (b[1]-a[1])
+        dproduct = (c[0] - a[0]) * (b[0] - a[0]) + (c[1]-a[1]) * (b[1]-a[1])
 
-        if dotproduct < 0:
+        if dproduct < 0:
             return False
 
-        squaredlengthba = (b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1])
-        if dotproduct > squaredlengthba:
+        slengthba = (b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1])
+        if dproduct > slengthba:
             return False
 
         return True

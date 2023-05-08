@@ -3,9 +3,11 @@
 
 {% block content %} 
 <div id="content"> </div>
+        <!-- SideBar -->
         <div class="w3-sidebar w3-bar-block w3-animate-left w3-card w3-grey" style="width:25%;" id="mySidebar">
           <button class="w3-bar-item w3-button w3-large"
           onclick="w3_close()">Close &times;</button>
+          <!-- SideBar Buttons -->
           <div id="setStart">
             <p>Start Node:</p>
             <span id="startNode"></span>
@@ -51,9 +53,6 @@
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="removeStop()" id="removeStop">Remove stop from route</button>
           </div>
 
-
-
-          <!--<a href="#" class="w3-bar-item w3-button">Link 3</a> -->
           <div id="requestRoute">
             <button href="#" class="w3-bar-item w3-button" style="width:100%;" onclick="fireRequest()" id="fireButton">Request Route</button>
           </div>
@@ -68,6 +67,8 @@
             </form>
           </div>
 
+
+          <!-- Hidden form to fire request to the flask server-->
           <div id="requestForm" style="visibility:hidden;"> 
             <form id="myForm" action="/requestPath" method="post"> 
                 <input type="hidden" id="stNode" name="stNode" value="">
@@ -81,23 +82,24 @@
           </div>
 
         </div>
-   
+
+        <!-- Button to open SideBar, and box to enter property name -->
         <div class="w3-grey" style="width:100%;" id="barButton">
           <button class="w3-button w3-grey w3-xlarge" onclick="w3_open()">&#9776;</button>
           <form id="myForm" action="/mapAuth" method="post" style="float:right;margin:10px 0 0 0;">
             <input type="text" name="userName" id="userName" onfocus="this.value=''" value="{{username}}" >
             <input type="submit" name="submitLogin" value="Select Farm" id="submitLogin">
-        </form>
-          
+          </form> 
         </div>
               
 
-
-        <div class="map-wrapper" id="maper">
+        <!-- Map Wrapper -->
+        <div class="map-wrapper" id="mapper">
             <div id="map">
             </div>
         </div>
-
+        
+        <!-- Inline Javascript -->
         <script type= "text/javascript">
         var currentLocation = [];
         var startingNode = [];
@@ -135,10 +137,10 @@
 
         w3_close()
 	    //var bound = JSON.parse('{{ boundaries | tojson}}');
-        var marker;
+      var marker;
 	    var bound = JSON.parse({{ boundaries | tojson}});
         //console.log(bound);
-        var map = L.map('map').setView([50.71, -2.44], 13);
+      var map = L.map('map').setView([50.71, -2.44], 13);
         
 
 	    var popup = L.popup();
@@ -149,8 +151,7 @@
 
 	    
 	    for(let i = 0; i < bound.length; i++) {
-    		//console.log(bound["features"][i]["properties"]["Name"])
-		    //var polygondata = bound["features"][i]["geometry"]["coordinates"];
+
             var polygondata = bound[i]["geometry"]["coordinates"];
 	
             polygondata[0].forEach(function (item, index) {
@@ -163,19 +164,18 @@
             if (bound[i]["properties"]["boundaryType"] == "obstacle"){
                 polygon.setStyle({fillColor:"#FF0000"});
                 polygon.bringToFront();
-            }
+            };
             if (bound[i]["properties"]["boundaryType"] == "property"){
                 map.fitBounds(polygon.getBounds());
                 polygon.on("click", function (event){
-                    //console.log(event.latlng.lat + ", " + event.latlng.lng);
                     currentLocation = [event.latlng.lat, event.latlng.lng]
                     if(marker) {
                         map.removeLayer(marker);
-                    }
+                    };
             marker = new L.marker([event.latlng.lat, event.latlng.lng], {icon: defaultIcon}).addTo(map);
-        })
-            }
-		    //polygon.bindPopup(bound["features"][i]["properties"]["desc"]);
+                });
+            };
+
             polygon.on("click", function (event) {
                 map.fire("click", event);
             });
@@ -184,7 +184,7 @@
 
         
         if (path.length != 1){
-            //console.log("run")
+            
             var pointLine = [];
             for(let i = 0; i<path.length; i++) {
                 cord = path[i];
