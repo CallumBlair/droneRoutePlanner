@@ -3,7 +3,7 @@ function w3_open() {
         Opens the sidebar
      */
     document.getElementById("mySidebar").style.display = "block";
-    document.getElementById("maper").style.width = "75%";
+    document.getElementById("mapper").style.width = "75%";
 }
 
 function w3_close() {
@@ -11,7 +11,7 @@ function w3_close() {
         closes the sidebar
      */
     document.getElementById("mySidebar").style.display = "none";
-    document.getElementById("maper").style.width = "100%";
+    document.getElementById("mapper").style.width = "100%";
 }
 
 function addStop(){
@@ -133,3 +133,5 @@ function fireRequest(){
         document.getElementById("myForm").submit(); 
     }
 }
+
+
